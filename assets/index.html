@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="gbk"/>
+    <title>Title</title>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+
+<div>
+    <button id="btn-chose-table">选表</button>
+    <button id="btn-chose-file">选文件</button>
+</div>
+<script type="text/tiscript">
+
+    self.ready=function(){
+
+       $(#btn-chose-table).on("click", function() {
+          view.dialog({url:"table.html",width:500,height:500});
+          //view.setDBSource('d','s');
+          //view.CreateWindow("table.html")
+       });
+       $(#btn-chose-file).on("click", function() {
+
+       });
+    }
+
+</script>
+</body>
+</html>

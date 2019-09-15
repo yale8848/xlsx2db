@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Title</title>
+    <style type="text/css">
+
+        .data ul {
+            width: 45%;
+            float: left
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <select id="driver" name="driver">
+        <option value="mysql">mysql</option>
+    </select>
+    <input id="source" name="source" type="text" value="" placeholder="数据源"/> <button id="sure">确认</button><br/>
+    数据源例子：user:password@tcp(host:port)/db?charset=utf8
+</div>
+<div class="data">
+    <ul >
+        <li>aa</li>
+        <li>aa</li>
+        <li>aa</li>
+        <li>aa</li>
+    </ul>
+    <ul>
+        <li>aa</li>
+        <li>aa</li>
+        <li>aa</li>
+        <li>aa</li>
+    </ul>
+</div>
+<script type="text/tiscript">
+    $(#sure).on("click",function () {
+        var d = $(#driver).value;
+        var s = $(input[name='source']).value.trim();
+        if (d.length === 0||s.length ===0){
+            view.msgbox(#alert, "aaa");
+            return;
+        }
+        view.parent.setDBSource(d,s);
+    });
+</script>
+</body>
+</html>

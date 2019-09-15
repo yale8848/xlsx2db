@@ -1,17 +1,18 @@
 // Create by Yale 2019/9/12 17:59
-package internal
+package db
 
 import (
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"testing"
+	"time"
 )
 
 func getConnect() DB {
 	b, _ := ioutil.ReadFile("db.info")
 	d := db{}
-	err := d.Connect("mysql", string(b))
+	err := Connect("mysql", string(b))
 	if err != nil {
 		panic(err)
 	}
@@ -19,27 +20,33 @@ func getConnect() DB {
 }
 func TestDb_GetDBNames(t *testing.T) {
 	db := getConnect()
-	n, _ := db.GetDBNames()
+	n, _ := GetDBNames()
 	fmt.Sprintln(n)
 }
 
 func TestDb_GetTabScheme(t *testing.T) {
 	db := getConnect()
-	n, _ := db.GetTabScheme("db_test", "tb_test")
+	n, _ := GetTabScheme("db_test", "tb_test")
 	fmt.Sprintln(n)
 
 }
 func TestDb_Insert(t *testing.T) {
 	p := make([]map[string]interface{}, 0)
 
-	for i := 10000; i < 10000+10; i++ {
+	n := time.Now().Format("2006-01-02 15:04:05")
+	for i := 2 * 10; i < 2*10+10; i++ {
 		mp := make(map[string]interface{})
-		mp["test_number"] = i
-		mp["test_name"] = strconv.Itoa(i + 800)
+		mp["test_number"] = strconv.Itoa(i)
+		mp["test_name"] = strconv.Itoa(i)
+		mp["test_time"] = n
+		mp["test_f"] = "3.14"
+		mp["test_d"] = "3.14"
+		mp["test_date"] = n
+		mp["test_timestamp"] = n
 		p = append(p, mp)
 	}
 
 	db := getConnect()
-	db.Insert("db_test", "tb_test", p)
+	Insert("db_test", "tb_test", p)
 
 }

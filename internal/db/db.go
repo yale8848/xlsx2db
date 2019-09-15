@@ -1,19 +1,22 @@
 // Create by Yale 2019/9/12 16:54
-package internal
+package db
 
 import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"github.com/jmoiron/sqlx"
-	"strings"
 )
 
+type tableInfo struct {
+	ColumnName string
+	ColumnType string
+}
 type DB interface {
 	Connect(driverName, dataSourceName string) error
 	GetDBNames() ([]string, error)
 	GetTableNames(db string) ([]string, error)
-	GetTabScheme(db, tb string) ([]string, error)
+	GetTabScheme(db, tb string) (map[string]string, error)
 	Insert(db, tb string, params []map[string]interface{}) error
 }
 
@@ -29,27 +32,29 @@ func (d *db) getNames(sql string) ([]string, error) {
 }
 func (d *db) Insert(db, tb string, params []map[string]interface{}) error {
 
-	sql := `Insert into %s.%s (%s) values(%s) `
 	clos := make([]string, 0)
-	vs := make([]string, 0)
 	for k, _ := range params[0] {
 		clos = append(clos, k)
-		vs = append(vs, "?")
 	}
-	sqls := make([]string, 0)
-	for i := 0; i < len(params); i++ {
-		sqls = append(sqls, fmt.Sprintf(sql, db, tb, strings.Join(clos, ","), strings.Join(vs, ",")))
-	}
-	_, e := d.eng.Exec(sqls, &params)
+	_, e := d.eng.Table(db + "." + tb).Cols(clos...).Insert(params)
 
 	fmt.Println(e)
 
 	return nil
 
 }
-func (d *db) GetTabScheme(db, tb string) ([]string, error) {
-	sql := `select COLUMN_NAME from information_schema.columns where table_schema = '%s'and TABLE_NAME = '%s'`
-	return d.getNames(fmt.Sprintf(sql, db, tb))
+func (d *db) GetTabScheme(db, tb string) (map[string]string, error) {
+	tbi := make([]tableInfo, 0)
+	sql := `select COLUMN_NAME,column_type from information_schema.columns where table_schema = '%s'and TABLE_NAME = '%s'`
+	err := d.eng.SQL(sql).Find(&tbi)
+	if err != nil {
+		return nil, err
+	}
+	mp := make(map[string]string)
+	for _, v := range tbi {
+		mp[v.ColumnName] = v.ColumnType
+	}
+	return mp, nil
 }
 func (d *db) GetTableNames(db string) ([]string, error) {
 	sql := `select TABLE_NAME from information_schema.columns where table_schema = '%s' `
