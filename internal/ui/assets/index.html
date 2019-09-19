@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="gbk"/>
+    <title>Xlsx2DB</title>
+    <style type="text/css">
+        table {
+            border: 1px solid #000;
+            border-collapse:collapse;
+        }
+        table,th, td
+        {
+            border: 1px solid black;
+        }
+/*        body{
+            background-image: url("https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture");
+            background-repeat:no-repeat;
+            background-position:center;
+        }*/
+    </style>
+</head>
+<body>
+
+<div>
+    <button id="btn-chose-table">选表</button><br/>
+    <span id="table"></span>
+
+    <button id="btn-chose-file">选文件</button><br/>
+    <span id="filePath"></span><br/><br/>
+
+    <div id="msg"></div>
+
+    <button id="btn-sure">显示字段</button>
+    <button id="btn-import">导入</button>
+
+    <table>
+        <thead>
+          <tr>
+              <th>序号</th>
+              <th>文件头</th>
+              <th>表字段</th>
+              <th>选中</th>
+          </tr>
+        </thead>
+        <tbody id="tb-content">
+
+        </tbody>
+
+    </table>
+
+</div>
+<script type="text/tiscript">
+
+
+  function msg(m){
+    $(#msg).text = m;
+  }
+   function start(){
+
+  }
+  function finish(){
+      view.msgbox(#alert, "完成");
+  }
+  $(#btn-import).on("click",function(){
+
+    var s = $(#table).text;
+    var trs = $$(#tb-content tr);
+    var ret = [];
+    for(var c in trs) {
+            if(c[3][0].getState(Element.STATE_CHECKED)) {
+              ret.push(
+                  {
+                    index:c[0].text.toInteger(),
+                    field:c[2][0].value
+                  }
+              );
+            }
+        }
+     var f = $(#filePath).text;
+     if(s.length == 0){
+     view.msgbox(#alert,"请先选表");
+       return;
+     }
+     if(f.length == 0){
+     view.msgbox(#alert,"请选文件");
+       return;
+     }
+     if(ret.length == 0){
+      view.msgbox(#alert,"没有要导入的数据");
+       return;
+     }
+     var dbn = s.split(".")[0];
+     var tbn = s.split(".")[1];
+     view.importData(f,dbn,tbn,JSON.stringify(ret));
+  });
+
+   function getSelTabNames(i,t){
+     var select = Element.create([select:""]);
+     select.attributes["id"] = "sel"+i;
+     for(var i =0;i < t.length;i++){
+       var op = Element.create([option:t[i].columnName]);
+       op.value = t[i].columnName;
+       select.append(op);
+     }
+     return select;
+   }
+
+   function renderTables(f,t){
+      for(var i=0;i<f.length;i++){
+        var tr = Element.create([tr:""]);
+        var ii = ""+f[i].index;
+        tr.append(Element.create([td:ii]));
+        var tt = f[i].title;
+        tr.append(Element.create([td:tt]));
+
+        var td = Element.create([td:""]);
+        td.append(getSelTabNames(f[i].index,t));
+        tr.append(td);
+
+        var td1 = Element.create([td:""]);
+
+        var ci = "check"+ii
+        var ck = Element.create([input:""]);
+        ck.attributes["type"] = "checkbox"
+        ck.attributes["id"] = ci
+
+        td1.append(ck);
+        tr.append(td1);
+
+        $(#tb-content).append(tr);
+      }
+   }
+
+    view.setTable = function(db,tab){
+      $(#table).text = db+"."+tab
+    }
+    self.ready=function(){
+       $(#btn-sure).on("click", function() {
+           var s = $(#table).text;
+           var f = $(#filePath).text;
+           var data = view.getTableInfos( s.split(".")[0], s.split(".")[1]);
+           data = JSON.parse(data);
+           if(data.err == 1){
+             view.msgbox(#alert, data.msg);
+             return;
+           }
+
+            if(data.err == 1){
+              view.msgbox(#alert, data.msg);
+              return;
+            }
+            var data1 = view.getFileTitles(f);
+            data1 = JSON.parse(data1);
+            if(data1.err == 1){
+              view.msgbox(#alert, data1.msg);
+              return;
+            }
+
+            renderTables(data1.data,data.data);
+
+
+
+       });
+       $(#btn-chose-table).on("click", function() {
+          //var f = [{"title":"aa","index":0},{"title":"aa","index":1},{"title":"aa","index":2},{"title":"aa","index":3},{"title":"aa","index":4},{"title":"aa","index":5},{"title":"aa","index":6},{"title":"aa","index":7},{"title":"aa","index":8},{"title":"aa","index":9}];
+         // var t = [{"columnName":"order_status_id","columnType":"bigint(20)"},{"columnName":"id","columnType":"varchar(64)"},{"columnName":"order_value","columnType":"varchar(64)"},{"columnName":"mobile","columnType":"varchar(20)"},{"columnName":"time","columnType":"varchar(64)"},{"columnName":"product","columnType":"varchar(64)"},{"columnName":"state","columnType":"varchar(32)"},{"columnName":"SIM","columnType":"varchar(64)"},{"columnName":"lgtsId","columnType":"varchar(64)"},{"columnName":"create_at","columnType":"datetime"},{"columnName":"bus_type","columnType":"varchar(50)"},{"columnName":"update_at","columnType":"datetime"},{"columnName":"state_last","columnType":"varchar(32)"}];
+          //renderTables(f,t);
+          view.dialog({url:"table.html",width:500,height:500});
+       });
+       $(#btn-chose-file).on("click", function() {
+            const filter = "xlsx Files|*.xlsx";
+            const defaultExt = "xlsx";
+            const initialPath = System.path(#USER_DOCUMENTS);
+            const caption = "选择xlsx";
+            var file = view.selectFile(#open, filter, defaultExt, initialPath, caption );
+            $(#filePath).text = file;
+            return true;
+       });
+    }
+
+</script>
+</body>
+</html>

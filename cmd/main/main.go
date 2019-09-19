@@ -7,6 +7,5 @@ import (
 
 func main() {
 	sciter.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO)
-
-	ui.NewWin().Create("index.html")
+	ui.NewMain().Create("index.html")
 }

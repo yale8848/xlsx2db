@@ -11,8 +11,8 @@ import (
 
 func getConnect() DB {
 	b, _ := ioutil.ReadFile("db.info")
-	d := db{}
-	err := Connect("mysql", string(b))
+	d := xdb{}
+	err := d.Connect("mysql", string(b))
 	if err != nil {
 		panic(err)
 	}
@@ -20,13 +20,13 @@ func getConnect() DB {
 }
 func TestDb_GetDBNames(t *testing.T) {
 	db := getConnect()
-	n, _ := GetDBNames()
+	n, _ := db.GetDBNames()
 	fmt.Sprintln(n)
 }
 
 func TestDb_GetTabScheme(t *testing.T) {
 	db := getConnect()
-	n, _ := GetTabScheme("db_test", "tb_test")
+	n, _ := db.GetTabScheme("db_test", "tb_test")
 	fmt.Sprintln(n)
 
 }
@@ -47,6 +47,6 @@ func TestDb_Insert(t *testing.T) {
 	}
 
 	db := getConnect()
-	Insert("db_test", "tb_test", p)
+	db.Insert("db_test", "tb_test", p)
 
 }

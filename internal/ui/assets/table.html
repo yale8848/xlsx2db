@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="gbk"/>
+    <title>选表</title>
+    <style type="text/css">
+
+        .data {
+            padding: 0px;
+            margin: 0px;
+            margin-top: 5px;
+            border-top: 1px solid #000;
+        }
+
+        .data ul {
+            padding: 0px;
+            margin: 0px;
+            width: 50%;
+            float: left
+        }
+        .data ul li {
+            cursor: pointer;
+            list-style-type:none;
+        }
+        .focus{
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+
+<div>
+    <select id="driver" name="driver">
+        <option value="mysql">mysql</option>
+    </select>
+    数据源: <input id="source" name="source" type="text" value="" placeholder="数据源"/>
+    <button id="sure">确认</button><br/>
+    数据源例子：user:password@tcp(host:port)/db?charset=utf8
+</div>
+<div class="data">
+    <ul id="db-names">
+    </ul>
+    <ul id="db-tables">
+
+    </ul>
+</div>
+<script type="text/tiscript">
+
+    function renderTables(db){
+        var data = view.parent.getTableName(db);
+        data = JSON.parse(data);
+        if(data.err == 1){
+            view.msgbox(#alert, data.msg);
+            return;
+         }
+        $(#db-tables).clear();
+        for (var i = 0 ; i < data.data.length;i++){
+            var li = Element.create([li:data.data[i]])
+            li.on("click",function(){
+                view.parent.setTable(db,this.text)
+                view.close();
+            });
+            $(#db-tables).append(li);
+        }
+    }
+    $(#sure).on("click",function () {
+
+
+        var d = $(#driver).value;
+        var s = $(input[name='source']).value.trim();
+        if (d.length === 0||s.length ===0){
+            view.msgbox(#alert, "请先选表");
+            return;
+        }
+        view.parent.setDBSource(d,s);
+        var data = view.parent.getDBName()
+        data = JSON.parse(data);
+        if(data.err == 1){
+         view.msgbox(#alert, data.msg);
+        }else{
+
+        $(#db-names).clear();
+          for (var i = 0 ; i < data.data.length;i++){
+             var li = Element.create([li:data.data[i]])
+             li.on("click",function(){
+                $$(#db-names > li).every(function(el){
+                  el.attributes.removeClass("focus");
+                  return true;
+                });
+                this.attributes.addClass("focus");
+                renderTables(this.text);
+             });
+             $(#db-names).append(li);
+          }
+        }
+    });
+</script>
+</body>
+</html>
