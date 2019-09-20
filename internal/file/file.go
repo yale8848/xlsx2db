@@ -49,7 +49,9 @@ func (this *Xlsx) GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFu
 	defer xl.Close()
 	st := xl.Sheet(0)
 
+	finish := false
 	ri := st.Rows()
+
 	for {
 		if ri.HasNext() {
 			i, row := ri.Next()
@@ -57,9 +59,15 @@ func (this *Xlsx) GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFu
 				continue
 			}
 			mp := make(map[int]string)
-			for _, v := range tbfInfo {
-				sf := strings.ToLower(v.FieldType)
+			for i, v := range tbfInfo {
 				vv := row.Cell(v.Index).String()
+				if i == 0 && len(vv) == 0 {
+					finish = true
+					break
+				}
+
+				sf := strings.ToLower(v.FieldType)
+
 				t, er := row.Cell(v.Index).Date()
 				if er != nil {
 					sf = ""
@@ -80,6 +88,10 @@ func (this *Xlsx) GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFu
 					break
 				}
 				mp[v.Index] = vv
+			}
+
+			if finish {
+				break
 			}
 			err := rowFun(i, mp)
 			if err != nil {
