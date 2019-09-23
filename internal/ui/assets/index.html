@@ -89,6 +89,8 @@
       view.msgbox(#alert,"没有要导入的数据");
        return;
      }
+
+     msg('开始导入...');
      var dbn = s.split(".")[0];
      var tbn = s.split(".")[1];
      view.importData(f,dbn,tbn,JSON.stringify(ret));
@@ -106,6 +108,8 @@
    }
 
    function renderTables(f,t){
+
+      $(#tb-content).clear();
       for(var i=0;i<f.length;i++){
         var tr = Element.create([tr:""]);
         var ii = ""+f[i].index;
@@ -136,6 +140,8 @@
     }
     self.ready=function(){
        $(#btn-sure).on("click", function() {
+
+
            var s = $(#table).text;
            var f = $(#filePath).text;
            var data = view.getTableInfos( s.split(".")[0], s.split(".")[1]);
@@ -149,7 +155,11 @@
               view.msgbox(#alert, data.msg);
               return;
             }
+            msg('读取文件...');
             var data1 = view.getFileTitles(f);
+
+            msg('');
+
             data1 = JSON.parse(data1);
             if(data1.err == 1){
               view.msgbox(#alert, data1.msg);
