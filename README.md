@@ -14,5 +14,8 @@
 [windows-x64](./package/xlsx2dbV0.1.zip)
 
  
-
- 
+### todo
+ - add chose number when import
+ - add button chose all checkbox
+ - hide import button when start import
+ - add stop button
