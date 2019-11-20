@@ -64,6 +64,7 @@ func (this *main) AddDefineFunction(w *window.Window) {
 		dbName := args[1].String()
 		tbName := args[2].String()
 		data := args[3].String()
+		num := args[4].Int()
 
 		value := make([]TabFileData, 0)
 		_ = json.Unmarshal([]byte(data), &value)
@@ -118,7 +119,7 @@ func (this *main) AddDefineFunction(w *window.Window) {
 					mp[mfd[k]] = v
 				}
 				dmap = append(dmap, mp)
-				if len(dmap) == 500 {
+				if len(dmap) == num {
 					err := xd.Insert(dbName, tbName, dmap)
 					if err != nil {
 						return err
