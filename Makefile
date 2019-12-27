@@ -1,6 +1,7 @@
 BUILD_NAME:=xlsx2db
-BUILD_VERSION:=2.0
+BUILD_VERSION:=2.1
 SOURCE:=./cmd/main/main.go
+LDFLAGS_DEBUG:=-ldflags "-X main.Version=${BUILD_VERSION}"
 LDFLAGS:=-ldflags "-s -w -H windowsgui -X main.Version=${BUILD_VERSION}"
 RICEFLAG:="github.com/yale8848/xlsx2db/internal/ui" embed-go
 
