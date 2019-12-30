@@ -18,7 +18,7 @@ type Win interface {
 	AddDefineFunction(w *window.Window)
 	Create(htmlPath string)
 }
-type main struct {
+type mainWin struct {
 	driver    string
 	source    string
 	w         *window.Window
@@ -48,15 +48,15 @@ func (this *ret) String() string {
 	return string(b)
 }
 func NewMain() Win {
-	return &main{}
+	return &mainWin{}
 }
-func (this *main) call(fn string, args string) {
+func (this *mainWin) call(fn string, args string) {
 	this.w.Call(fn, sciter.NewValue(args))
 }
-func (this *main) msg(msg string) {
+func (this *mainWin) msg(msg string) {
 	this.w.Call("msg", sciter.NewValue(msg))
 }
-func (this *main) AddDefineFunction(w *window.Window) {
+func (this *mainWin) AddDefineFunction(w *window.Window) {
 
 	w.DefineFunction("importData", func(args ...*sciter.Value) *sciter.Value {
 
@@ -224,7 +224,7 @@ func (this *main) AddDefineFunction(w *window.Window) {
 		return sciter.NewValue(r.String())
 	})
 }
-func (this *main) Create(htmlPath string) {
+func (this *mainWin) Create(htmlPath string) {
 
 	tool.MustFindBox("assets")
 

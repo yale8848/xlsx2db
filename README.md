@@ -37,3 +37,8 @@
  - [msys-1.0.10](https://sourceforge.net/projects/mingw/files/MSYS/Base/msys-core/msys-1.0.10/MSYS-1.0.10.exe/download)
  - add to env path
  
+ 
+### About Windows XP (Window32) Version
+- Go lib must <= 1.10.7
+- Must convert go.mod to vendor use : go mod vendor
+- Notice modify some code go:linkname and high api(like Strings.ReplaceAll) 

@@ -32,7 +32,7 @@ func (this *Xlsx) open(filePath string) (*xlsx.Spreadsheet, error) {
 	if err != nil {
 		return nil, err
 	}
-	filePath = strings.ReplaceAll(filePath, "file://", "")
+	filePath = strings.Replace(filePath, "file://", "", -1)
 
 	xl, err := xlsx.Open(filePath)
 	if err != nil {
