@@ -14,6 +14,7 @@ type Title struct {
 type TableFileInfo struct {
 	Index     int
 	FieldType string
+	DefValue  string
 }
 type XFile interface {
 	GetFileTitles(filePath string) ([]Title, error)
@@ -61,6 +62,11 @@ func (this *Xlsx) GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFu
 			mp := make(map[int]string)
 			for i, v := range tbfInfo {
 				vv := row.Cell(v.Index).String()
+
+				if len(v.DefValue) > 0 {
+					vv = v.DefValue
+				}
+
 				if i == 0 && len(vv) == 0 {
 					finish = true
 					break
@@ -70,6 +76,9 @@ func (this *Xlsx) GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFu
 
 				t, er := row.Cell(v.Index).Date()
 				if er != nil {
+					sf = ""
+				}
+				if len(v.DefValue) > 0 {
 					sf = ""
 				}
 				switch sf {
@@ -87,6 +96,7 @@ func (this *Xlsx) GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFu
 					vv = t.Format("2006")
 					break
 				}
+
 				mp[v.Index] = vv
 			}
 

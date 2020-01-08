@@ -32,8 +32,9 @@ type ret struct {
 }
 
 type TabFileData struct {
-	Index int    `json:"index"`
-	Field string `json:"field"`
+	Index    int    `json:"index"`
+	Field    string `json:"field"`
+	DefValue string `json:"defValue"`
 }
 
 func (this *ret) Fail(msg string) {
@@ -98,7 +99,7 @@ func (this *mainWin) AddDefineFunction(w *window.Window) {
 			}
 			for _, v := range value {
 				mfd[v.Index] = v.Field
-				tbfInfo = append(tbfInfo, file.TableFileInfo{Index: v.Index, FieldType: getFieldType(v.Field)})
+				tbfInfo = append(tbfInfo, file.TableFileInfo{Index: v.Index, FieldType: getFieldType(v.Field), DefValue: v.DefValue})
 			}
 
 			xd := db.NewDB()

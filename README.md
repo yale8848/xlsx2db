@@ -11,15 +11,15 @@
 
 ### download
 
-[windows-64](./package/xlsx2db_64_V2.0.gz)
+[windows-64](./package/xlsx2db_64_V2.1.gz)
 
 [windows-32](./package/xlsx2db_32_V2.0.gz)
 
 
 ### todo
  - [x] add chose number when import
+ - [x] hide import button when start import
  - add button chose all checkbox
- - hide import button when start import
  - add stop button
  
 ### Window32
