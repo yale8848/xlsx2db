@@ -12,7 +12,7 @@ package32:
 	cp -f ${BUILD_NAME}.exe  ./package/windows-32/; cd package; tar -zcvf ${BUILD_NAME}_32_V${BUILD_VERSION}.gz ./windows-32;cd ..;rm -f ${BUILD_NAME}.exe
 
 package64:
-	cp -f ${BUILD_NAME}.exe  ./package/windows-64/; cd package; tar -zcvf ${BUILD_NAME}_64_V${BUILD_VERSION}.gz ./windows-64;cd ..;rm -f ${BUILD_NAME}.exe
+	cp -f ${BUILD_NAME}.exe  ./package/windows-64/; cd package; tar -zcvf ${BUILD_NAME}_64_V${BUILD_VERSION}.tar.gz ./windows-64;cd ..;rm -f ${BUILD_NAME}.exe
 
 build32: rice
 	CGO_ENABLED=1 \
