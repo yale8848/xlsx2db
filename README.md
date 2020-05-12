@@ -11,7 +11,7 @@
 
 ### download
 
-[windows-64](./package/xlsx2db_64_V2.1.tar.gz)
+[windows-64](./package/xlsx2db_64_V2.2.tar.gz)
 
 [windows-32](./package/xlsx2db_32_V2.0.gz)
 

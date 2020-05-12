@@ -23,6 +23,9 @@
             padding-bottom: 10px;
         }
 
+         #ops-area{
+             display: none;
+         }
     </style>
 </head>
 <body>
@@ -36,8 +39,16 @@
 
     <div id="msg"></div>
 
-    <button id="btn-sure">显示字段</button>
-    <button id="btn-import">导入</button>
+    <div id="ops-area">
+
+        <select id="sheet"></select>
+        <button id="btn-sure">显示字段</button>
+        <button id="btn-import">导入</button>
+
+    </div>
+
+
+
     <div class="import-number-area">
         每次导入数量： <input type="number" id="import-number" value="1000"/>
     </div>
@@ -139,6 +150,24 @@
      return select;
    }
 
+
+   function getSheetNames(){
+      var f = $(#filePath).text;
+      var data1 = view.getSheetNames(f);
+      data1 = JSON.parse(data1);
+      if(data1.err == 1){
+           view.msgbox(#alert, data1.msg);
+           return;
+      }
+      var fd = data1.data;
+
+       $(#sheet).options.clear();
+       for(var i=0;i<fd.length;i++){
+            $(#sheet).options.$append(<option value={fd[i].index}>{fd[i].title}</option>)
+        }
+        $(#sheet).value = fd[0].index;
+   }
+
    function renderTables(f,t){
 
       $(#tb-content).clear();
@@ -199,13 +228,8 @@
              view.msgbox(#alert, data.msg);
              return;
            }
-
-            if(data.err == 1){
-              view.msgbox(#alert, data.msg);
-              return;
-            }
             msg('读取文件...');
-            var data1 = view.getFileTitles(f);
+            var data1 = view.getFileTitles(f,$(#sheet).value);
 
             msg('');
 
@@ -234,6 +258,9 @@
             const caption = "选择xlsx";
             var file = view.selectFile(#open, filter, defaultExt, initialPath, caption );
             $(#filePath).text = file;
+            getSheetNames();
+            $(#ops-area).style["display"] = "block";
+
             return true;
        });
     }

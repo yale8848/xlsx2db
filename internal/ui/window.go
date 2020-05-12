@@ -154,8 +154,9 @@ func (this *mainWin) AddDefineFunction(w *window.Window) {
 	})
 	w.DefineFunction("getFileTitles", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
+		index := args[1].Int()
 		f := file.NewFile()
-		t, e := f.GetFileTitles(p)
+		t, e := f.GetFileTitlesBySheetIndex(p, index)
 		r := ret{}
 		if e != nil {
 			r.Fail(e.Error())
@@ -164,6 +165,20 @@ func (this *mainWin) AddDefineFunction(w *window.Window) {
 		}
 		return sciter.NewValue(r.String())
 	})
+
+	w.DefineFunction("getSheetNames", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+		f := file.NewFile()
+		t, e := f.GetSheetNames(p)
+		r := ret{}
+		if e != nil {
+			r.Fail(e.Error())
+		} else {
+			r.Ok(t)
+		}
+		return sciter.NewValue(r.String())
+	})
+
 	w.DefineFunction("getDBName", func(args ...*sciter.Value) *sciter.Value {
 
 		r := ret{}

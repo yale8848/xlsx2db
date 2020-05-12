@@ -19,10 +19,56 @@ type TableFileInfo struct {
 type XFile interface {
 	GetFileTitles(filePath string) ([]Title, error)
 	GetDataByIndex(filePath string, tbfInfo []TableFileInfo, rowFun RowFun) error
+	GetSheetNames(filePath string) ([]Title, error)
+	GetFileTitlesBySheetIndex(filePath string, index int) ([]Title, error)
 }
 
 type Xlsx struct {
 }
+
+func (this *Xlsx) GetSheetNames(filePath string) ([]Title, error) {
+	xl, err := this.open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer xl.Close()
+
+	t := make([]Title, 0)
+
+	for i, v := range xl.SheetNames() {
+		t = append(t, Title{v, i})
+	}
+	return t, nil
+}
+
+func (this *Xlsx) GetFileTitlesBySheetIndex(filePath string, index int) ([]Title, error) {
+	xl, err := this.open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer xl.Close()
+
+	t := make([]Title, 0)
+
+	st := xl.Sheet(index)
+
+	ci := st.Cols()
+	for {
+		if ci.HasNext() {
+			i, co := ci.Next()
+			cv := co.Cell(0).String()
+			if len(cv) > 0 {
+				t = append(t, Title{cv, i})
+			}
+
+		} else {
+			break
+		}
+	}
+
+	return t, nil
+}
+
 type RowFun func(int, map[int]string) error
 
 func NewFile() XFile {
