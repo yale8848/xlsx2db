@@ -257,7 +257,7 @@
             const initialPath = System.path(#USER_DOCUMENTS);
             const caption = "Ñ¡Ôñxlsx";
             var file = view.selectFile(#open, filter, defaultExt, initialPath, caption );
-            $(#filePath).text = file;
+            $(#filePath).text = URL.decode(file);
             getSheetNames();
             $(#ops-area).style["display"] = "block";
 
