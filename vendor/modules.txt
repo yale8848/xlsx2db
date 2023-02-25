@@ -73,7 +73,8 @@ github.com/vcaesar/gops
 github.com/vcaesar/imgo
 # golang.org/x/image v0.0.0-20190910094157-69e4b8554b2a
 golang.org/x/image/bmp
-# golang.org/x/sys v0.0.0-20190916202348-b4ddaad3f8a3
+# golang.org/x/sys v0.1.0
+golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # google.golang.org/appengine v1.6.0

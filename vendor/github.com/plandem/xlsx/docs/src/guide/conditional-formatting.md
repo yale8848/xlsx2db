@@ -1,2 +1,0 @@
-# Conditional Formatting
-[[toc]]
