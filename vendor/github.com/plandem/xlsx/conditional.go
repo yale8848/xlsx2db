@@ -15,7 +15,7 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname fromConditionalFormat github.com/yale8848/xlsx2db/vendor/github.com/plandem/xlsx/format/conditional.from
+//go:linkname fromConditionalFormat github.com/plandem/xlsx/format/conditional.from
 func fromConditionalFormat(f *conditional.Info) (*ml.ConditionalFormatting, []*styles.Info)
 
 type conditionals struct {
@@ -75,7 +75,7 @@ func (c *conditionals) Add(ci *conditional.Info, refs []types.Ref) error {
 			//finalize rules
 			for _, ruleInfo := range info.Rules {
 				for i, formula := range ruleInfo.Formula {
-					ruleInfo.Formula[i] = ml.Formula(strings.Replace(string(formula), ":cell:", string(startCellRef),-1))
+					ruleInfo.Formula[i] = ml.Formula(strings.ReplaceAll(string(formula), ":cell:", string(startCellRef)))
 				}
 			}
 

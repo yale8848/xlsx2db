@@ -15,7 +15,7 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname fromRule github.com/yale8848/xlsx2db/vendor/github.com/plandem/xlsx/format/conditional/rule.fromRule
+//go:linkname fromRule github.com/plandem/xlsx/format/conditional/rule.fromRule
 func fromRule(info *rule.Info) (*ml.ConditionalRule, *styles.Info)
 
 //Info is objects that holds combined information about cell conditional format
