@@ -35,7 +35,7 @@ func (x textRule) setValue(r *Info, value string, formula string, t primitives.C
 	r.rule.Operator = operator
 	r.rule.Text = value
 
-	formula = strings.Replace(formula, ":length:", strconv.FormatInt(int64(len(value)), 10),-1)
+	formula = strings.ReplaceAll(formula, ":length:", strconv.FormatInt(int64(len(value)), 10))
 	formula = fmt.Sprintf(formula, x.escape(value))
 	r.rule.Formula = []ml.Formula{ml.Formula(formula)}
 

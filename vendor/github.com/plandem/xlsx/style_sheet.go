@@ -16,7 +16,7 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname fromStyleFormat github.com/yale8848/xlsx2db/vendor/github.com/plandem/xlsx/format/styles.from
+//go:linkname fromStyleFormat github.com/plandem/xlsx/format/styles.from
 func fromStyleFormat(f *styles.Info) (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border, namedInfo *ml.NamedStyleInfo)
 
 //styleSheet is a higher level object that wraps ml.StyleSheet with functionality
